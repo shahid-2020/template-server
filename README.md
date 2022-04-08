@@ -29,25 +29,3 @@ or
 ```sh
 yarn start
 ```
-
-## Docker
-
-Template is very easy to install and deploy in a Docker container for development.
-
-The starter template provides production ready dockerfile, you can create docker-compose for staging or production.
-
-```sh
-docker-compose -f "docker-compose.dev.yml" up -d --build.
-```
-```sh
-docker-compose -f "docker-compose.dev.yml" down
-```
-
-> Note: `docker-compose -f "docker-compose.dev.yml" down -v` is required, If you do not want to remove data of Databases.
-
-## License
-
-MIT
-
-**Centauri Montes**
-# template-server
