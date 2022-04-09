@@ -1,5 +1,5 @@
 import * as winston from 'winston'
-import { injectable } from 'tsyringe'
+import { container, injectable } from 'tsyringe'
 import { ConfigService, configService } from '@config'
 
 export const level = () => {
@@ -14,7 +14,7 @@ export default class Logger {
   private logger: winston.Logger
 
   constructor(private readonly configService: ConfigService) {
-    this.env = this.configService.get('NODE_ENV') as string
+    this.env = this.configService.get<string>('NODE_ENV')
 
     const level = () => {
       const isDevelopment = this.env === 'development'
@@ -71,3 +71,5 @@ export default class Logger {
     this.logger.error(message)
   }
 }
+
+export const logger = container.resolve(Logger)

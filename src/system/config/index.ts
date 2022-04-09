@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv'
-import { inject, singleton } from 'tsyringe'
-import { container } from 'tsyringe'
 import { join } from 'path'
+import * as dotenv from 'dotenv'
+import { container } from 'tsyringe'
+import { inject, singleton } from 'tsyringe'
 
 @singleton()
 export class ConfigService {

@@ -14,10 +14,10 @@ export default class Redis {
     this.isActive = false
   }
 
-  public async connectRedis(): Promise<void> {
+  async connect(): Promise<void> {
     try {
       this.client = createClient({
-        url: `redis://${this.configService.get('REDIS_HOST') as string}`,
+        url: `redis://${this.configService.get<string>('REDIS_HOST')}`,
       })
 
       this.client
@@ -28,9 +28,10 @@ export default class Redis {
           this.isActive = true
           this.logger.info('Redis ready')
         })
-        .on('error', (_error: any) => {
+        .on('error', (error: any) => {
           this.isActive = false
           this.logger.error('Redis error')
+          this.logger.error(JSON.stringify(error))
         })
         .on('close', () => {
           this.isActive = false
@@ -47,25 +48,31 @@ export default class Redis {
       await this.client.connect()
     } catch (error: any) {
       this.logger.error('Redis error')
+      this.logger.error(JSON.stringify(error))
     }
   }
 
-  async set(key: string, value: string, expiry: number): Promise<void> {
-    if (this.isActive) {
+  async set(
+    key: string,
+    value: string,
+    expiry: number,
+    strictMode = true
+  ): Promise<void> {
+    if (strictMode || this.isActive) {
       await this.client.set(key, value, expiry)
     }
   }
 
-  async get(key: string): Promise<string | null> {
-    if (this.isActive) {
+  async get(key: string, strictMode = true): Promise<string | null> {
+    if (strictMode || this.isActive) {
       return await this.client.get(key)
     }
 
     return null
   }
 
-  async del(key: string): Promise<void> {
-    if (this.isActive) {
+  async del(key: string, strictMode = true): Promise<void> {
+    if (strictMode || this.isActive) {
       await this.client.del(key)
     }
   }

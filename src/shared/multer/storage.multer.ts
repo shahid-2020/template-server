@@ -1,5 +1,5 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 import { diskStorage } from 'multer'
 
 export const multerStoragePath = (folderName: string) => {

@@ -4,8 +4,8 @@ import {
   getRepository,
   Repository,
 } from 'typeorm'
-import { IWrite } from '../interface/IWrite.interface'
-import { IRead } from '../interface/IRead.interface'
+import { IWrite } from '@repository/interface/IWrite.interface'
+import { IRead } from '@repository/interface/IRead.interface'
 
 export abstract class BaseRepository<T> implements IWrite<T>, IRead<T> {
   public readonly repository: Repository<T>

@@ -29,26 +29,24 @@ export default class ErrorMiddleware {
     const timestamp = new Date().toUTCString()
     const uri = `${req.protocol}://${req.hostname}${req.originalUrl}`
 
-    // this.logger.error(JSON.stringify({ timestamp, uri, error }))
-
-    // if (error instanceof HttpException) {
-    //   return res.status(error.statusCode).send({
-    //     statusCode: error.statusCode,
-    //     message: error.message,
-    //     error: error.error,
-    //     status: error.status,
-    //     exceptionType: error.exceptionType,
-    //     uri,
-    //     timestamp,
-    //   })
-    // }
-
+    this.logger.error(JSON.stringify({ timestamp, uri, error }))
+    this.logger.info('Server Status: Active')
     let exception: HttpException
 
+    if (error instanceof HttpException) {
+      exception = error
+      return res.status(exception.statusCode).send({
+        statusCode: exception.statusCode,
+        message: exception.message,
+        exception: exception.error,
+        status: exception.status,
+        exceptionType: exception.exceptionType,
+        uri,
+        timestamp,
+      })
+    }
+
     switch (error.constructor) {
-      case HttpException:
-        exception = error as HttpException
-        break
       case QueryFailedError:
         let dbError = error as QueryFailedError
         exception = new UnprocessableEntityException(

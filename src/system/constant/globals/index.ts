@@ -1,17 +1,17 @@
-import path from "path";
-import { User } from "@domain/user.entity";
+import path from 'path'
+import { User } from '@domain/user.entity'
 
 declare global {
   namespace Express {
     interface Request {
-      user: User;
+      user: User
     }
   }
   namespace NodeJS {
     interface Global {
-      __basedir: string;
+      __basedir: string
     }
   }
 }
 
-global.__basedir = path.resolve("./");
+global.__basedir = path.resolve('./')

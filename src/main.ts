@@ -18,7 +18,7 @@ import AuthController from '@controller/auth.controller'
 import UserController from '@controller/user.controller'
 
 async function bootstrap(): Promise<void> {
-  const port = configService.get('PORT') as number
+  const port = configService.get<number>('PORT')
 
   const app = express()
 
@@ -71,7 +71,6 @@ async function bootstrap(): Promise<void> {
 
 bootstrap()
 
-//TODO Process errors globally
 //TODO Use decorators for route mapping
 //TODO Complete unit of work
 //TODO Write test cases of current flow

@@ -1,9 +1,9 @@
+import { NextFunction, Request, Response } from 'express'
+import { inject, injectable, delay } from 'tsyringe'
 import { UserRepository } from '@repository/user.repository'
 import { UtilService } from '@service/util.service'
 import UnauthorizedException from '@shared/http/exception/unauthorizedException.http'
 import { ConfigService } from '@config'
-import { NextFunction, Request, Response } from 'express'
-import { inject, injectable, delay } from 'tsyringe'
 
 @injectable()
 export default class AuthMiddleware {

@@ -8,7 +8,7 @@ import Redis from './redis'
   const redis = container.resolve(Redis)
   await Promise.all([
     db.connectPg(),
-    //redis.connectRedis()
+    //redis.connect()
   ])
   const connectionManager = getConnectionManager()
   const connection = connectionManager.get('default')
