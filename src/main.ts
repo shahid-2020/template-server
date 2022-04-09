@@ -1,11 +1,9 @@
-import { core } from './core'
-import 'reflect-metadata'
-import './shared/constant/global'
-import './shared/db'
+// import'module-alias/register'
+// import 'source-map-support/register'
+import '@system/init'
+import { configService } from '@config'
 import { container } from 'tsyringe'
 import express from 'express'
-import dotenv from 'dotenv'
-import config from 'config'
 import helmet from 'helmet'
 import cors from 'cors'
 import xss from 'xss-clean'
@@ -13,25 +11,23 @@ import rateLimit from 'express-rate-limit'
 import hpp from 'hpp'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import ErrorMiddleware from './shared/middleware/error.middleware'
-import Logger from './shared/logger/logger'
-import AuthController from './infrastructure/controller/auth.controller'
-import HealthController from './infrastructure/controller/health.controller'
-import UserController from './infrastructure/controller/user.controller'
+import Logger from '@shared/logger'
+import ErrorMiddleware from '@shared/middleware/error.middleware'
+import HealthController from '@controller/health.controller'
+import AuthController from '@controller/auth.controller'
+import UserController from '@controller/user.controller'
 
 async function bootstrap(): Promise<void> {
-  dotenv.config()
-
-  const port = config.get('PORT') as number
+  const port = configService.get('PORT') as number
 
   const app = express()
 
   Sentry.init({
-    dsn: config.get('SENTRY_DSN'),
-    release: `${config.get('npm_package_name')}@${config.get(
+    dsn: configService.get('SENTRY_DSN'),
+    release: `${configService.get('npm_package_name')}@${configService.get(
       'npm_package_version'
     )}`,
-    environment: config.get('NODE_ENV'),
+    environment: configService.get('NODE_ENV'),
     integrations: [
       new Sentry.Integrations.Http({ tracing: true }),
       new Tracing.Integrations.Express({ app }),
@@ -69,7 +65,6 @@ async function bootstrap(): Promise<void> {
   app.use('/api/v1/user', userController.routes())
 
   app.use(Sentry.Handlers.errorHandler())
-  core()
   app.use([errorMiddleware.routeNotFound, errorMiddleware.processErrors])
   app.listen(port, () => logger.info(`Application started at port ${port}`))
 }

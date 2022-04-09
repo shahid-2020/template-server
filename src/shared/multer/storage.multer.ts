@@ -6,7 +6,7 @@ export const multerStoragePath = (folderName: string) => {
   return {
     storage: diskStorage({
       destination: (_req, _file, cb) => {
-        const tempPath = path.join(__dirname, '..', '..', 'uploads', folderName)
+        const tempPath = path.join(global.__basedir, 'uploads', folderName)
         fs.mkdirSync(tempPath, { recursive: true })
         cb(null, tempPath)
       },

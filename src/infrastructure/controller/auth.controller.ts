@@ -1,13 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { autoInjectable } from 'tsyringe'
-import {
-  RefreshTokenDto,
-  SigninDto,
-  SignupDto,
-} from '../../shared/dto/auth.dto'
-import { UtilService } from '../../service/util.service'
-import BadRequestException from '../../shared/http/exception/badRequestException.http'
-import AuthService from '../../service/auth.service'
+import AuthService from '@service/auth.service'
+import { UtilService } from '@service/util.service'
+import { RefreshTokenDto, SigninDto, SignupDto } from '@shared/dto/auth.dto'
+import BadRequestException from '@shared/http/exception/badRequestException.http'
 
 @autoInjectable()
 export default class AuthController {

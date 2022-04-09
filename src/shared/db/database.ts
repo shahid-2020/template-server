@@ -1,7 +1,7 @@
 import { singleton } from 'tsyringe'
 import { createConnection } from 'typeorm'
-import Logger from '../logger/logger'
-import ormconfig from '../../../ormconfig'
+import Logger from '@shared/logger'
+import ormconfig from '@shared/config/ormconfig'
 
 @singleton()
 export default class Database {

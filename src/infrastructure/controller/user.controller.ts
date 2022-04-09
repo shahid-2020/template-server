@@ -1,10 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { autoInjectable } from 'tsyringe'
-import { UtilService } from '../../service/util.service'
-import BadRequestException from '../../shared/http/exception/badRequestException.http'
-import UserService from '../../service/user.service'
-import AuthMiddleware from '../../shared/middleware/auth.middleware'
-import { UpdateUserDto } from '../../shared/dto/user.dto'
+import UserService from '@service/user.service'
+import { UtilService } from '@service/util.service'
+import { UpdateUserDto } from '@shared/dto/user.dto'
+import BadRequestException from '@shared/http/exception/badRequestException.http'
+import AuthMiddleware from '@shared/middleware/auth.middleware'
 
 @autoInjectable()
 export default class UserController {

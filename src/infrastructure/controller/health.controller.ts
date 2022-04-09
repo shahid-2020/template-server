@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { autoInjectable } from 'tsyringe'
-import HealthService from '../../service/health.service'
+import HealthService from '@service/health.service'
 
 @autoInjectable()
 export default class HealthController {

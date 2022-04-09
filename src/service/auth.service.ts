@@ -1,16 +1,16 @@
 import { delay, inject, injectable } from 'tsyringe'
 import { plainToInstance } from 'class-transformer'
 import bcrypt from 'bcrypt'
-import config from 'config'
-import { User } from '../domain/user.entity'
-import { RefreshTokenDto, SigninDto, SignupDto } from '../shared/dto/auth.dto'
-import HttpResponse from '../shared/http/response/response.http'
-import OkResponse from '../shared/http/response/ok.http'
-import { UserRepository } from '../repository/user.repository'
-import NotFoundException from '../shared/http/exception/notFoundException.http'
 import { UtilService } from './util.service'
-import Redis from '../shared/db/redis'
-import UnauthorizedException from '../shared/http/exception/unauthorizedException.http'
+import { UserRepository } from '@repository/user.repository'
+import Redis from '@shared/db/redis'
+import { RefreshTokenDto, SigninDto, SignupDto } from '@shared/dto/auth.dto'
+import HttpResponse from '@shared/http/response/response.http'
+import { User } from '@domain/user.entity'
+import OkResponse from '@shared/http/response/ok.http'
+import NotFoundException from '@shared/http/exception/notFoundException.http'
+import { ConfigService } from '@config'
+import UnauthorizedException from '@shared/http/exception/unauthorizedException.http'
 
 @injectable()
 export default class AuthService {
@@ -18,6 +18,7 @@ export default class AuthService {
     @inject(delay(() => UserRepository))
     private readonly userRepository: UserRepository,
     private readonly utilService: UtilService,
+    private readonly configService: ConfigService,
     private readonly redis: Redis
   ) {}
 
@@ -52,9 +53,9 @@ export default class AuthService {
 
       const { token: accessToken } = this.utilService.generateJWTToken(
         { id: user.id },
-        config.get('ACCESS_TOKEN_SECRET'),
+        this.configService.get('ACCESS_TOKEN_SECRET'),
         `${
-          (config.get('ACCESS_TOKEN_SECRET_EXPIRES_HRS') as number) *
+          (this.configService.get('ACCESS_TOKEN_SECRET_EXPIRES_HRS') as number) *
           60 *
           60 *
           1000
@@ -63,9 +64,9 @@ export default class AuthService {
 
       const { token: refreshToken } = this.utilService.generateJWTToken(
         { id: user.id },
-        config.get('REFRESH_TOKEN_SECRET'),
+        this.configService.get('REFRESH_TOKEN_SECRET'),
         `${
-          (config.get('REFRESH_TOKEN_SECRET_EXPIRES_HRS') as number) *
+          (this.configService.get('REFRESH_TOKEN_SECRET_EXPIRES_HRS') as number) *
           60 *
           60 *
           1000
@@ -74,7 +75,7 @@ export default class AuthService {
       await this.redis.set(
         user.id,
         refreshToken,
-        (config.get('REFRESH_TOKEN_SECRET_EXPIRES_HRS') as number) * 60 * 60
+        (this.configService.get('REFRESH_TOKEN_SECRET_EXPIRES_HRS') as number) * 60 * 60
       )
       return new OkResponse({ accessToken, refreshToken })
     } catch (error: any) {
@@ -87,7 +88,7 @@ export default class AuthService {
       const { refreshToken } = data
       const payload = this.utilService.verifyJWTToken(
         refreshToken,
-        config.get('REFRESH_TOKEN_SECRET') as string
+        this.configService.get('REFRESH_TOKEN_SECRET') as string
       )
 
       const cachedToken = await this.redis.get(payload.id)
@@ -106,9 +107,9 @@ export default class AuthService {
 
       const { token: accessToken } = this.utilService.generateJWTToken(
         { id: user.id },
-        config.get('ACCESS_TOKEN_SECRET'),
+        this.configService.get('ACCESS_TOKEN_SECRET'),
         `${
-          (config.get('ACCESS_TOKEN_SECRET_EXPIRES_HRS') as number) *
+          (this.configService.get('ACCESS_TOKEN_SECRET_EXPIRES_HRS') as number) *
           60 *
           60 *
           1000
@@ -126,7 +127,7 @@ export default class AuthService {
       const { refreshToken } = data
       const payload = this.utilService.verifyJWTToken(
         refreshToken,
-        config.get('REFRESH_TOKEN_SECRET') as string
+        this.configService.get('REFRESH_TOKEN_SECRET') as string
       )
 
       await this.redis.del(payload.id)

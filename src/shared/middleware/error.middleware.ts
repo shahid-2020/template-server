@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import { autoInjectable } from 'tsyringe'
-import Logger from '../logger/logger'
-import HttpException from '../http/exception/exception.http'
-import NotFoundException from '../http/exception/notFoundException.http'
-import UnauthorizedException from '../http/exception/unauthorizedException.http'
-import InternalServerException from '../http/exception/internalServerException.http'
-import UnprocessableEntityException from '../http/exception/unprocessableEntityException.http'
 import { QueryFailedError } from 'typeorm'
+import Logger from '@shared/logger'
+import HttpException from '@shared/http/exception/exception.http'
+import InternalServerException from '@shared/http/exception/internalServerException.http'
+import NotFoundException from '@shared/http/exception/notFoundException.http'
+import UnauthorizedException from '@shared/http/exception/unauthorizedException.http'
+import UnprocessableEntityException from '@shared/http/exception/unprocessableEntityException.http'
 
 @autoInjectable()
 export default class ErrorMiddleware {
@@ -26,7 +26,6 @@ export default class ErrorMiddleware {
     res: Response,
     _next: NextFunction
   ) {
-    // console.log(error)
     const timestamp = new Date().toUTCString()
     const uri = `${req.protocol}://${req.hostname}${req.originalUrl}`
 

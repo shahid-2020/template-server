@@ -6,8 +6,9 @@ import OkResponse from '../shared/http/response/ok.http'
 @injectable()
 export default class HealthService {
   async health(req: Request): Promise<HttpResponse> {
+    const uptime = process.uptime()
     const timestamp = new Date().toUTCString()
     const uri = `${req.protocol}://${req.hostname}${req.originalUrl}`
-    return new OkResponse({ status: 'active', uri, timestamp })
+    return new OkResponse({ status: 'active', uri, uptime, timestamp })
   }
 }

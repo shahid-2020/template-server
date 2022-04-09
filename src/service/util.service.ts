@@ -5,8 +5,11 @@ import _ from 'lodash'
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { IJWTPayload, IJWTToken } from '../shared/constant/interfaces/jwt.interface'
-import { DtoResult } from '../shared/constant/types/util.type'
+import { DtoResult } from '@shared/constant/types/util.type'
+import {
+  IJWTPayload,
+  IJWTToken,
+} from '@shared/constant/interfaces/jwt.interface'
 
 @injectable()
 export class UtilService {
@@ -118,7 +121,7 @@ export class UtilService {
    * @returns {Array} array
    */
   uniqueArrayOfObjects<T>(array: T[], iteratee: T): T[] {
-    return _.uniqBy(array, iteratee)
+    return _.uniqBy(array, iteratee as any)
   }
 
   /**

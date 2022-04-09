@@ -1,7 +1,7 @@
 import { Entity, Column } from 'typeorm'
 import { Exclude } from 'class-transformer'
-import { Role, Status } from '../shared/constant/enums/user.enum'
 import { Base } from './base.entity'
+import { Role, Status } from '@shared/constant/enums/user.enum'
 
 @Entity('user')
 export class User extends Base {

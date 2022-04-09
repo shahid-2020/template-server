@@ -1,16 +1,17 @@
+import { UserRepository } from '@repository/user.repository'
+import { UtilService } from '@service/util.service'
+import UnauthorizedException from '@shared/http/exception/unauthorizedException.http'
+import { ConfigService } from '@config'
 import { NextFunction, Request, Response } from 'express'
 import { inject, injectable, delay } from 'tsyringe'
-import config from 'config'
-import { UtilService } from '../../service/util.service'
-import UnauthorizedException from '../http/exception/unauthorizedException.http'
-import { UserRepository } from '../../repository/user.repository'
 
 @injectable()
 export default class AuthMiddleware {
   constructor(
     @inject(delay(() => UserRepository))
     private readonly userRepository: UserRepository,
-    private readonly utilService: UtilService
+    private readonly utilService: UtilService,
+    private readonly configService: ConfigService
   ) {
     this.isAuthorized = this.isAuthorized.bind(this)
   }
@@ -26,7 +27,7 @@ export default class AuthMiddleware {
 
       const payload = this.utilService.verifyJWTToken(
         token,
-        config.get('ACCESS_TOKEN_SECRET')
+        this.configService.get('ACCESS_TOKEN_SECRET')
       )
 
       const user = await this.userRepository.findById(payload.id)

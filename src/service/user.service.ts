@@ -1,12 +1,12 @@
 import { delay, inject, injectable } from 'tsyringe'
 import { plainToInstance } from 'class-transformer'
 import bcrypt from 'bcrypt'
-import { User } from '../domain/user.entity'
-import HttpResponse from '../shared/http/response/response.http'
-import OkResponse from '../shared/http/response/ok.http'
-import BadRequestException from '../shared/http/exception/badRequestException.http'
-import { UserRepository } from '../repository/user.repository'
-import { UpdateUserDto } from 'src/shared/dto/user.dto'
+import { UserRepository } from '@repository/user.repository'
+import HttpResponse from '@shared/http/response/response.http'
+import { User } from '@domain/user.entity'
+import OkResponse from '@shared/http/response/ok.http'
+import BadRequestException from '@shared/http/exception/badRequestException.http'
+import { UpdateUserDto } from '@shared/dto/user.dto'
 
 @injectable()
 export default class UserService {

@@ -1,20 +1,23 @@
 import { singleton } from 'tsyringe'
 import { createClient } from 'redis'
-import config from 'config'
-import Logger from '../logger/logger'
+import { ConfigService } from '@config'
+import Logger from '@shared/logger'
 
 @singleton()
 export default class Redis {
   private client: any
   private isActive: boolean
-  constructor(private readonly logger: Logger) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: Logger
+  ) {
     this.isActive = false
   }
 
   public async connectRedis(): Promise<void> {
     try {
       this.client = createClient({
-        url: `redis://${config.get('REDIS_HOST') as string}`,
+        url: `redis://${this.configService.get('REDIS_HOST') as string}`,
       })
 
       this.client
