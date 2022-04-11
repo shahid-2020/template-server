@@ -1,5 +1,7 @@
+import { FindManyOptions, FindOneOptions } from 'typeorm'
+
 export interface IRead<T> {
-  find(item: T, relations?: string[]): Promise<T[]>
+  find(options: FindManyOptions): Promise<T[]>
   findById(id: string, relations?: string[]): Promise<T | null>
-  findOne(item: T, relations?: string[]): Promise<T | null>
+  findOne(options: FindOneOptions): Promise<T | null>
 }

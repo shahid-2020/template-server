@@ -31,7 +31,7 @@ export default class Redis {
         .on('error', (error: any) => {
           this.isActive = false
           this.logger.error('Redis error')
-          this.logger.error(JSON.stringify(error))
+          this.logger.error(JSON.stringify(error, null, 2))
         })
         .on('close', () => {
           this.isActive = false
@@ -48,7 +48,7 @@ export default class Redis {
       await this.client.connect()
     } catch (error: any) {
       this.logger.error('Redis error')
-      this.logger.error(JSON.stringify(error))
+      this.logger.error(JSON.stringify(error, null, 2))
     }
   }
 

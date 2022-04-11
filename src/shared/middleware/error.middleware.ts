@@ -29,7 +29,7 @@ export default class ErrorMiddleware {
     const timestamp = new Date().toUTCString()
     const uri = `${req.protocol}://${req.hostname}${req.originalUrl}`
 
-    this.logger.error(JSON.stringify({ timestamp, uri, error }))
+    this.logger.error(JSON.stringify({ timestamp, uri, error }, null, 2))
     this.logger.info('Server Status: Active')
     let exception: HttpException
 
