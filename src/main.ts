@@ -4,6 +4,7 @@ import '@system/init'
 import { configService } from '@config'
 import { container } from 'tsyringe'
 import express from 'express'
+import morgan from 'morgan'
 import helmet from 'helmet'
 import cors from 'cors'
 import xss from 'xss-clean'
@@ -51,7 +52,7 @@ async function bootstrap(): Promise<void> {
     standardHeaders: true,
     legacyHeaders: false,
   })
-
+  app.use(morgan('combined'))
   app.use(express.json({ limit: '5mb' }))
   app.use(express.urlencoded({ extended: false, limit: '5mb' }))
   app.use(cors({ origin: true, credentials: true }))
