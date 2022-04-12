@@ -72,6 +72,6 @@ async function bootstrap(): Promise<void> {
 
 bootstrap()
 
-//TODO Use decorators for route mapping
+//TODO Use decorators for route mapping //class // http verb //midleware //versioning 
 //TODO Complete unit of work
 //TODO Write test cases of current flow
