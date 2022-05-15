@@ -12,11 +12,12 @@ import rateLimit from 'express-rate-limit'
 import hpp from 'hpp'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import Logger from '@shared/logger'
+import { logger } from '@shared/logger'
 import ErrorMiddleware from '@shared/middleware/error.middleware'
 import HealthController from '@controller/health.controller'
 import AuthController from '@controller/auth.controller'
 import UserController from '@controller/user.controller'
+import { mapRoutes } from '@system/core'
 
 async function bootstrap(): Promise<void> {
   const port = configService.get<number>('PORT')
@@ -39,7 +40,6 @@ async function bootstrap(): Promise<void> {
   app.use(Sentry.Handlers.requestHandler())
   app.use(Sentry.Handlers.tracingHandler())
 
-  const logger = container.resolve(Logger)
   const errorMiddleware = container.resolve(ErrorMiddleware)
   const healthController = container.resolve(HealthController)
   const authController = container.resolve(AuthController)
@@ -52,6 +52,8 @@ async function bootstrap(): Promise<void> {
     standardHeaders: true,
     legacyHeaders: false,
   })
+
+  app.use(apiLimiter)
   app.use(morgan('combined'))
   app.use(express.json({ limit: '5mb' }))
   app.use(express.urlencoded({ extended: false, limit: '5mb' }))
@@ -59,9 +61,9 @@ async function bootstrap(): Promise<void> {
   app.use(helmet())
   app.use(xss())
   app.use(hpp({ whitelist: [] }))
-  app.use(apiLimiter)
 
-  app.use('/api/v1/health', healthController.routes())
+  mapRoutes(app, [HealthController])
+  // app.use('/api/v1/health', healthController.routes())
   app.use('/api/v1/auth', authController.routes())
   app.use('/api/v1/user', userController.routes())
 
@@ -72,6 +74,6 @@ async function bootstrap(): Promise<void> {
 
 bootstrap()
 
-//TODO Use decorators for route mapping //class // http verb //midleware //versioning 
+//TODO Use decorators for route mapping //class // http verb //midleware //versioning
 //TODO Complete unit of work
 //TODO Write test cases of current flow

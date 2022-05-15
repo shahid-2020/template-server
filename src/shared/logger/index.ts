@@ -1,5 +1,5 @@
 import * as winston from 'winston'
-import { container, injectable } from 'tsyringe'
+import { container, singleton } from 'tsyringe'
 import { ConfigService, configService } from '@config'
 
 export const level = () => {
@@ -8,7 +8,7 @@ export const level = () => {
   return isDevelopment ? 'debug' : 'warn'
 }
 
-@injectable()
+@singleton()
 export default class Logger {
   private env: string
   private logger: winston.Logger

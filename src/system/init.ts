@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import '@system/constant/globals'
+import '@config'
 import '@shared/db/init'
 import { logger } from '@shared/logger'
 

@@ -1,7 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { autoInjectable } from 'tsyringe'
 import HealthService from '@service/health.service'
+import { Controller, Get } from '@system/core'
 
+@Controller('/api/v1/health')
 @autoInjectable()
 export default class HealthController {
   private router: Router
@@ -11,6 +13,7 @@ export default class HealthController {
     this.health = this.health.bind(this)
   }
 
+  @Get('/status')
   async health(
     req: Request,
     res: Response,
@@ -24,8 +27,8 @@ export default class HealthController {
     }
   }
 
-  public routes(): Router {
-    this.router.get('/status', this.health)
-    return this.router
-  }
+  // public routes(): Router {
+  //   this.router.get('/status', this.health)
+  //   return this.router
+  // }
 }
